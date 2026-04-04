@@ -17,8 +17,13 @@ const iconSvgs = {
     </svg>
   `,
   github: `
-    <svg viewBox="0 0 24 24" aria-hidden="true">
+    <svg viewBox="0 0 24 24">
       <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+    </svg>
+  `,
+  phone: `
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+      <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
     </svg>
   `
 };
@@ -172,7 +177,7 @@ function createContactAction(action) {
   link.href = action.href;
   link.setAttribute("aria-label", action.label);
 
-  if (!action.href.startsWith("mailto:")) {
+  if (!action.href.startsWith("mailto:") && !action.href.startsWith("tel:")) {
     link.target = "_blank";
     link.rel = "noreferrer";
   }
@@ -602,6 +607,10 @@ function renderPortfolio(data) {
           <span class="brand__name"></span>
         </a>
 
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+
         <nav class="nav" aria-label="Primary"></nav>
 
         <div class="actions" aria-label="Social links"></div>
@@ -619,6 +628,11 @@ function renderPortfolio(data) {
         <div class="hero__subtitle"></div>
         <p class="hero__copy"></p>
         <div class="hero__cta"></div>
+        <div class="scroll-indicator" aria-label="Scroll to projects" title="Scroll down">
+          <div class="circle">
+            <span class="arrow"></span>
+          </div>
+        </div>
       </section>
 
       <section id="experience" class="section container">
@@ -698,6 +712,7 @@ function renderPortfolio(data) {
   const brandMark = app.querySelector(".brand__mark");
   const brandName = app.querySelector(".brand__name");
   const nav = app.querySelector(".nav");
+  const mobileMenuBtn = app.querySelector(".mobile-menu-btn");
   const actions = app.querySelector(".actions");
   const heroEyebrow = app.querySelector(".hero__eyebrow");
   const heroTitle = app.querySelector(".hero__title");
@@ -738,6 +753,13 @@ function renderPortfolio(data) {
     nav.appendChild(link);
   });
 
+  mobileMenuBtn.addEventListener("click", () => {
+    nav.classList.toggle("is-open");
+  });
+  nav.addEventListener("click", (e) => {
+    if (e.target.tagName === 'A') nav.classList.remove("is-open");
+  });
+
   socialConfig.forEach(({ key, label }) => {
     actions.appendChild(createSocialIconLink(key, label, profile.links[key]));
   });
@@ -748,7 +770,7 @@ function renderPortfolio(data) {
   heroTitle.setAttribute("tabindex", "0");
   setupTitleChargeEffect(heroTitle);
   heroSubtitle.textContent = profile.title;
-  heroCopy.textContent = profile.tagline;
+  heroCopy.innerHTML = profile.tagline;
 
   hero.actions.forEach((action) => {
     const link = document.createElement("a");
@@ -767,6 +789,13 @@ function renderPortfolio(data) {
     link.textContent = action.label;
     heroCta.appendChild(link);
   });
+
+  const scrollIndicator = app.querySelector(".scroll-indicator");
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener("click", () => {
+      document.querySelector("#experience").scrollIntoView({ behavior: "smooth" });
+    });
+  }
 
   experienceTitle.textContent = sections.experience.title;
   experienceMeta.textContent = sections.experience.meta;
@@ -809,21 +838,21 @@ function renderPortfolio(data) {
   submitButton.textContent = sections.contact.form.submitLabel;
 
   // Initialize EmailJS with your live Public Key
-  emailjs.init("cI5_6Ie5v-yfpR2QA"); 
+  emailjs.init("cI5_6Ie5v-yfpR2QA");
 
   const form = document.getElementById("contact-form");
-  form.addEventListener("submit", function(event) {
+  form.addEventListener("submit", function (event) {
     event.preventDefault();
-    
+
     const submitBtn = document.getElementById("submit-btn");
     const originalText = submitBtn.innerText;
     submitBtn.innerText = "Sending...";
     submitBtn.disabled = true;
-    
+
     // Your exact configured IDs
-    const serviceID = "service_i4017i8"; 
-    const templateID = "template_8oy1gs6"; 
-    
+    const serviceID = "service_i4017i8";
+    const templateID = "template_8oy1gs6";
+
     // Send the form payload
     emailjs.sendForm(serviceID, templateID, this)
       .then(() => {
@@ -850,31 +879,21 @@ function renderPortfolio(data) {
     }, 2000);
   }
 
-  footerEmail.href = email.href;
-  footerEmail.textContent = email.text;
+  if (footerEmail) footerEmail.remove();
 
-  // Render location & availability in footer
-  if (profile.location || profile.availability) {
-    const footerInner = app.querySelector(".footer__inner");
-    const locationEl = document.createElement("span");
-    locationEl.className = "footer__location";
-    const parts = [];
-    if (profile.location) parts.push(profile.location);
-    if (profile.availability) parts.push(profile.availability);
-    locationEl.textContent = parts.join(" · ");
-    locationEl.style.cssText = "font-size:0.75rem;color:var(--text-muted,#666);margin-top:0.25rem;display:block";
-    footerInner.appendChild(locationEl);
-  }
+  const mobileFooterIcons = [
+    { key: "linkedin", label: "LinkedIn", href: profile.links.linkedin },
+    { key: "gmail", label: "Gmail", href: email.href },
+    { key: "phone", label: "Phone", href: profile.links.phone },
+    { key: "github", label: "GitHub", href: profile.links.github }
+  ];
 
-  socialLinks.forEach((linkData, index) => {
-    footerLinks.appendChild(createFooterTextLink(linkData.label, linkData.href));
-
-    if (index < socialLinks.length - 1) {
-      const divider = document.createElement("span");
-      divider.className = "divider-dot";
-      footerLinks.appendChild(divider);
+  mobileFooterIcons.forEach((icon) => {
+    if (icon.href) {
+      footerLinks.appendChild(createSocialIconLink(icon.key, icon.label, icon.href));
     }
   });
+
 }
 
 function setupTitleChargeEffect(titleElement) {

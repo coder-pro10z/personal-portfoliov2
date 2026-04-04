@@ -2,14 +2,15 @@ const portfolioData = {
   profile: {
     name: "Praveen Kashyap",
     title: "Software Engineer at Coforge",
-    tagline: "ASP.NET Core APIs, Angular SPAs, and full-stack .NET architecture - clean code, DI patterns, and systems built to last.",
+    tagline: "Scalable <span class='highlight'>ASP.NET Core</span> APIs, dynamic <span class='highlight'>Angular</span> SPAs, and robust <span class='highlight'>.NET architecture</span> - focusing on <span class='highlight'>clean code</span> and <span class='highlight'>performance improvements</span>.",
     email: "[2pkashyap2001@gmail.com](mailto:2pkashyap2001@gmail.com)",
     location: "Noida, India",
     availability: "Open to opportunities",
     links: {
       github: "https://github.com/coder-pro10z",
       linkedin: "https://www.linkedin.com/in/coder-pro10z/",
-      resume: "./Praveen_Kashyap_Dotnet_resume.pdf"
+      resume: "./Praveen_Kashyap_Dotnet_resume.pdf",
+      phone: "tel:+917394990738"
     },
     brandMark: "PK",
     brandName: "Portfolio"
@@ -178,6 +179,16 @@ const portfolioData = {
           type: "linkedin",
           label: "Connect on LinkedIn",
           href: "https://www.linkedin.com/in/coder-pro10z/"
+        },
+        {
+          type: "github",
+          label: "View GitHub",
+          href: "https://github.com/coder-pro10z"
+        },
+        {
+          type: "phone",
+          label: "Call Me",
+          href: "tel:+917394990738"
         }
       ],
       form: {
