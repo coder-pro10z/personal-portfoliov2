@@ -46,7 +46,7 @@ const gridEffectConfig = {
   spacing: 23,
   dotRadius: 1,
   baseAlpha: 0.16,
-  hoverRadius: 145,
+  hoverRadius: 181,
   rippleRadius: 158,
   maxDotRadius: 2.6,
   rippleDuration: 1320,
