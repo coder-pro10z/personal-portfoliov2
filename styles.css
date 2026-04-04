@@ -1300,86 +1300,25 @@ span.highlight {
     --header-h: 60px; /* Slimmer header for mobile */
   }
 
-  /* 1. Header & Navigation Fix */
-  .nav, .actions .icon-btn:not(:last-child), .brand__name {
-    display: none; /* Hide desktop nav and extra icons */
-  }
-
-  .mobile-menu-btn {
-    display: block; /* Show your hamburger button */
-    background: none;
-    border: none;
-    color: var(--text);
-    padding: var(--gap-2);
-  }
-
+  
   /* 2. Hero Section - Breathability & Single Line Name */
   .hero {
     padding: 40px 0 60px;
     min-height: auto; /* Prevent forced full-height on small screens */
   }
 
-  .hero__title {
-    /* Adjusted clamp: min 2rem to ensure one-line fit */
-    font-size: clamp(2rem, 10vw, 2.8rem); 
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-    white-space: nowrap; /* Forces name to one line */
-  }
-
+  
   .hero__subtitle {
     font-size: 1rem;
     margin-top: var(--gap-3);
     padding: 0 var(--gap-4);
   }
 
-  .hero__copy {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-top: var(--gap-4);
-    padding: 0 var(--gap-5); /* Side breathing room */
-  }
-
-  /* 3. Grid Fixes - Stack everything vertically */
-  .projects, 
-  .stack-grid, 
-  .contact-grid {
-    grid-template-columns: 1fr !important;
-    gap: var(--gap-5);
-  }
+  
 
   .container {
     width: calc(100% - 40px); /* Ensures consistent 20px margins */
   }
 
-  /* 4. Skill Tags Scaling */
-  .skill-line {
-    flex-direction: column;
-    gap: var(--gap-1);
-  }
-
-  .skill-line strong {
-    min-width: auto;
-    padding-top: 0;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
-  /* 5. Mobile Footer Pinner (Socials) */
-  .contact-copy__actions {
-    display: flex;
-    justify-content: center;
-    gap: var(--gap-5);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: var(--surface-2);
-    backdrop-filter: blur(12px);
-    padding: var(--gap-4) 0 calc(var(--gap-4) + 10px); /* Extra space for iOS */
-    border-top: 1px solid var(--border);
-    border-radius: 20px 20px 0 0;
-    z-index: 100;
-  }
+  
 }
