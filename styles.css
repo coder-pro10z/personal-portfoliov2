@@ -96,7 +96,7 @@ button {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: none;
-  box-shadow: 
+  box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.08),
     0 0 12px rgba(59, 130, 246, 0.08);
 }
@@ -325,6 +325,7 @@ button {
   text-align: center;
   position: relative;
   isolation: isolate;
+  z-index: 5;
   min-height: calc(100vh - var(--header-h));
 }
 
@@ -535,12 +536,13 @@ span.highlight {
 }
 
 .scroll-indicator {
-  position: absolute;
-  bottom: 48px;
+  position: fixed;
+  bottom: 88px;
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
-  z-index: 10;
+  z-index: 9998;
+  pointer-events: auto;
 }
 
 .scroll-indicator .circle {
@@ -562,13 +564,22 @@ span.highlight {
   padding: 4px;
   transform: rotate(45deg);
   margin-bottom: 2px;
+  transition: transform 180ms ease, margin 180ms ease;
+}
+
+.scroll-indicator.scroll-indicator--top .arrow {
+  transform: rotate(-135deg);
+  margin-bottom: -2px;
 }
 
 @keyframes pulse-scroll {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
     box-shadow: 0 0 8px rgba(59, 130, 246, 0.1);
   }
+
   50% {
     opacity: 1;
     box-shadow: 0 0 16px rgba(59, 130, 246, 0.25);
@@ -576,9 +587,12 @@ span.highlight {
 }
 
 @keyframes bounce-scroll {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-6px);
   }
@@ -638,6 +652,8 @@ span.highlight {
 /* Sections */
 .section {
   padding: 56px 0 0;
+  position: relative;
+  z-index: 1;
 }
 
 .section__head {
@@ -1100,7 +1116,7 @@ span.highlight {
     padding: 24px;
     gap: 24px;
     border-bottom: 1px solid var(--border);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 99;
   }
 
@@ -1124,11 +1140,19 @@ span.highlight {
   }
 
   .hero {
-    padding: 70px 5px 90px;
+    padding: 52px 5px 90px;
+    justify-content: flex-start;
+  }
+
+  .hero__status {
+    margin-bottom: 14px;
   }
 
   .hero__title {
-    font-size: clamp(2.6rem, 12vw, 4rem);
+    font-size: clamp(1.9rem, 8.8vw, 3.2rem);
+    white-space: nowrap;
+    text-wrap: nowrap;
+    letter-spacing: -0.05em;
   }
 
   .hero__subtitle,
@@ -1167,6 +1191,10 @@ span.highlight {
   .contact-form .btn {
     width: 100%;
     justify-self: stretch;
+  }
+
+  .scroll-indicator {
+    bottom: 78px;
   }
 
   .footer {
@@ -1273,6 +1301,14 @@ span.highlight {
   .hero__copy {
     font-size: 0.97rem;
   }
+
+  .hero__title {
+    font-size: clamp(1.65rem, 8.2vw, 2.3rem);
+  }
+
+  .scroll-indicator {
+    bottom: 74px;
+  }
 }
 
 #snackbar {
@@ -1297,15 +1333,17 @@ span.highlight {
 
 @media (max-width: 768px) {
   :root {
-    --header-h: 60px; /* Slimmer header for mobile */
+    --header-h: 60px;
+    /* Slimmer header for mobile */
   }
 
-  
-  
+
+
 
   .container {
-    width: calc(100% - 40px); /* Ensures consistent 20px margins */
+    width: calc(100% - 40px);
+    /* Ensures consistent 20px margins */
   }
 
-  
+
 }

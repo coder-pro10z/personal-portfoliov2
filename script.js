@@ -206,6 +206,71 @@ function createMailtoUrl(emailHref, subject, message) {
   return query ? `mailto:${recipient}?${query}` : `mailto:${recipient}`;
 }
 
+function scrollToSection(target) {
+  if (!target) {
+    return;
+  }
+
+  const topbar = document.querySelector(".topbar");
+  const topbarHeight = topbar ? topbar.offsetHeight : 0;
+  const offset = window.innerWidth <= 768 ? 0 : 20;
+  const targetTop = target.getBoundingClientRect().top + window.scrollY - topbarHeight - offset;
+
+  window.scrollTo({
+    top: targetTop,
+    behavior: "smooth"
+  });
+}
+
+function scrollToPageEnd() {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: "smooth"
+  });
+}
+
+function scrollToPageTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function isAtPageBottom() {
+  return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8;
+}
+
+function getNextSectionTarget() {
+  const orderedSections = [
+    document.querySelector(".hero"),
+    document.querySelector("#experience"),
+    document.querySelector("#portfolio"),
+    document.querySelector("#about"),
+    document.querySelector("#contact")
+  ].filter(Boolean);
+
+  if (!orderedSections.length) {
+    return null;
+  }
+
+  const topbar = document.querySelector(".topbar");
+  const topbarHeight = topbar ? topbar.offsetHeight : 0;
+  const probeLine = window.scrollY + topbarHeight + 80;
+
+  for (let index = 0; index < orderedSections.length; index += 1) {
+    const section = orderedSections[index];
+    const sectionTop = section.offsetTop;
+    const nextSection = orderedSections[index + 1];
+    const nextTop = nextSection ? nextSection.offsetTop : Number.POSITIVE_INFINITY;
+
+    if (probeLine >= sectionTop && probeLine < nextTop) {
+      return nextSection;
+    }
+  }
+
+  return null;
+}
+
 function setupGridRippleEffect() {
   const existingCanvas = document.querySelector(".grid-ripple-canvas");
 
@@ -792,9 +857,32 @@ function renderPortfolio(data) {
 
   const scrollIndicator = app.querySelector(".scroll-indicator");
   if (scrollIndicator) {
+    const updateScrollIndicatorState = () => {
+      const atBottom = isAtPageBottom();
+      scrollIndicator.classList.toggle("scroll-indicator--top", atBottom);
+      scrollIndicator.setAttribute("aria-label", atBottom ? "Move to top" : "Move to next section");
+      scrollIndicator.setAttribute("title", atBottom ? "Move to top" : "Move down");
+    };
+
     scrollIndicator.addEventListener("click", () => {
-      document.querySelector("#experience").scrollIntoView({ behavior: "smooth" });
+      if (isAtPageBottom()) {
+        scrollToPageTop();
+        return;
+      }
+
+      const nextSection = getNextSectionTarget();
+
+      if (nextSection) {
+        scrollToSection(nextSection);
+        return;
+      }
+
+      scrollToPageEnd();
     });
+
+    window.addEventListener("scroll", updateScrollIndicatorState, { passive: true });
+    window.addEventListener("resize", updateScrollIndicatorState);
+    updateScrollIndicatorState();
   }
 
   experienceTitle.textContent = sections.experience.title;
@@ -1033,14 +1121,5 @@ document.addEventListener("click", (event) => {
   }
 
   event.preventDefault();
-
-  const topbar = document.querySelector(".topbar");
-  const topbarHeight = topbar ? topbar.offsetHeight : 0;
-  const offset = 20;
-  const targetTop = target.getBoundingClientRect().top + window.scrollY - topbarHeight - offset;
-
-  window.scrollTo({
-    top: targetTop,
-    behavior: "smooth"
-  });
+  scrollToSection(target);
 });
