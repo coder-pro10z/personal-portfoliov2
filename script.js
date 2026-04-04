@@ -34,7 +34,7 @@ const skillLabels = {
   frontend: "Frontend",
   database: "Database",
   tools: "Tools",
-  methodologies: "Methodologies"
+  methodologies: "Architecture & Methods"
 };
 
 const gridEffectConfig = {
@@ -98,6 +98,10 @@ function createProjectCard(project) {
     ? `<span class="${project.icon.type}" aria-hidden="true">${project.icon.name}</span>`
     : `<span>${project.icon || project.title.charAt(0)}</span>`;
 
+  const techTags = project.tech
+    .map((t) => `<span class="skill-tag">${t}</span>`)
+    .join("");
+
   article.innerHTML = `
     <div class="project-card__icon">${iconMarkup}</div>
     <h3 class="project-card__title">${project.title}</h3>
@@ -106,10 +110,36 @@ function createProjectCard(project) {
     <div class="project-card__body">
       <p>${project.description}</p>
       <ul class="project-card__list">${highlights}</ul>
+      <div class="skill-tags" style="margin-top:0.75rem">${techTags}</div>
     </div>
     <div class="project-card__footer">
       <a class="project-card__link" href="${projectHref}" target="_blank" rel="noreferrer">${projectLabel}</a>
       ${demoMarkup}
+    </div>
+  `;
+
+  return article;
+}
+
+function createExperienceCard(exp) {
+  const article = document.createElement("article");
+  article.className = "project-card";
+
+  const highlights = exp.highlights
+    .map((h) => `<li>${h}</li>`)
+    .join("");
+
+  const techTags = exp.tech
+    .map((t) => `<span class="skill-tag">${t}</span>`)
+    .join("");
+
+  article.innerHTML = `
+    <h3 class="project-card__title">${exp.role}</h3>
+    <p class="project-card__service">${exp.company} · ${exp.duration}</p>
+    <div class="project-card__divider"></div>
+    <div class="project-card__body">
+      <ul class="project-card__list">${highlights}</ul>
+      <div class="skill-tags" style="margin-top:0.75rem">${techTags}</div>
     </div>
   `;
 
@@ -437,7 +467,9 @@ function setupGridRippleEffect() {
       drawDot(point.x, point.y, finalAlpha, finalRadius);
     }
 
-    window.requestAnimationFrame(renderFrame);
+    if (!document.hidden) {
+      window.requestAnimationFrame(renderFrame);
+    }
   }
 
   function handlePointerMove(event) {
@@ -481,8 +513,14 @@ function setupGridRippleEffect() {
     pointer.active = false;
   }
 
+  let resizeTimer = null;
+  function debouncedResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resizeCanvas, 150);
+  }
+
   resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("resize", debouncedResize);
   window.addEventListener("pointermove", handlePointerMove);
   window.addEventListener("pointerleave", handlePointerLeave);
   window.addEventListener("click", (event) => addRipple(event.clientX, event.clientY, 1));
@@ -543,11 +581,17 @@ function setupGridRippleEffect() {
     });
     addRipple(event.detail.x, event.detail.y, event.detail.intensity);
   });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      window.requestAnimationFrame(renderFrame);
+    }
+  });
+
   window.requestAnimationFrame(renderFrame);
 }
 
 function renderPortfolio(data) {
-  const { profile, skills, projects, achievements, socialLinks, navigation, sections, hero } = data;
+  const { profile, skills, experience, projects, achievements, socialLinks, navigation, sections, hero } = data;
   const email = parseMarkdownEmail(profile.email);
 
   app.innerHTML = `
@@ -566,11 +610,23 @@ function renderPortfolio(data) {
 
     <main id="top">
       <section class="hero container">
+        <div class="hero__status">
+          <div class="status-dot"></div>
+          <span>Open to opportunities</span>
+        </div>
         <div class="hero__eyebrow"></div>
         <h1 class="hero__title"></h1>
         <div class="hero__subtitle"></div>
         <p class="hero__copy"></p>
         <div class="hero__cta"></div>
+      </section>
+
+      <section id="experience" class="section container">
+        <div class="section__head">
+          <h2 class="section__title"></h2>
+          <div class="section__meta"></div>
+        </div>
+        <div class="projects experience-list"></div>
       </section>
 
       <section id="portfolio" class="section container">
@@ -608,18 +664,23 @@ function renderPortfolio(data) {
             <div class="contact-copy__actions"></div>
           </div>
 
-          <form class="panel contact-form">
+          <form id="contact-form" class="panel contact-form">
             <label class="contact-form__field">
-              <span></span>
-              <input type="text" name="subject">
+              <span>Your Email</span>
+              <input type="email" name="from_email" placeholder="Your Email" aria-required="true" required>
             </label>
 
             <label class="contact-form__field">
               <span></span>
-              <textarea name="message" rows="6"></textarea>
+              <input type="text" name="subject" aria-required="true" required>
             </label>
 
-            <button type="submit" class="btn btn--primary"></button>
+            <label class="contact-form__field">
+              <span></span>
+              <textarea name="message" rows="6" aria-required="true" required></textarea>
+            </label>
+
+            <button id="submit-btn" type="submit" class="btn btn--primary" aria-label="Send Email"></button>
           </form>
         </div>
       </section>
@@ -631,6 +692,7 @@ function renderPortfolio(data) {
         </div>
       </footer>
     </main>
+    <div id="snackbar"></div>
   `;
 
   const brandMark = app.querySelector(".brand__mark");
@@ -642,9 +704,12 @@ function renderPortfolio(data) {
   const heroSubtitle = app.querySelector(".hero__subtitle");
   const heroCopy = app.querySelector(".hero__copy");
   const heroCta = app.querySelector(".hero__cta");
+  const experienceTitle = app.querySelector("#experience .section__title");
+  const experienceMeta = app.querySelector("#experience .section__meta");
+  const experienceList = app.querySelector(".experience-list");
   const projectTitle = app.querySelector("#portfolio .section__title");
   const projectMeta = app.querySelector("#portfolio .section__meta");
-  const projectsContainer = app.querySelector(".projects");
+  const projectsContainer = app.querySelector(".projects:not(.experience-list)");
   const aboutTitle = app.querySelector("#about .section__title");
   const aboutMeta = app.querySelector("#about .section__meta");
   const skillsPanel = app.querySelector(".skills");
@@ -679,6 +744,8 @@ function renderPortfolio(data) {
 
   heroEyebrow.textContent = hero.eyebrow;
   heroTitle.textContent = profile.name;
+  heroTitle.setAttribute("role", "button");
+  heroTitle.setAttribute("tabindex", "0");
   setupTitleChargeEffect(heroTitle);
   heroSubtitle.textContent = profile.title;
   heroCopy.textContent = profile.tagline;
@@ -700,6 +767,14 @@ function renderPortfolio(data) {
     link.textContent = action.label;
     heroCta.appendChild(link);
   });
+
+  experienceTitle.textContent = sections.experience.title;
+  experienceMeta.textContent = sections.experience.meta;
+  if (Array.isArray(experience)) {
+    experience.forEach((exp) => {
+      experienceList.appendChild(createExperienceCard(exp));
+    });
+  }
 
   projectTitle.textContent = sections.projects.title;
   projectMeta.textContent = sections.projects.meta;
@@ -733,13 +808,63 @@ function renderPortfolio(data) {
   messageInput.placeholder = sections.contact.form.messagePlaceholder;
   submitButton.textContent = sections.contact.form.submitLabel;
 
-  contactForm.addEventListener("submit", (event) => {
+  // Initialize EmailJS with your live Public Key
+  emailjs.init("cI5_6Ie5v-yfpR2QA"); 
+
+  const form = document.getElementById("contact-form");
+  form.addEventListener("submit", function(event) {
     event.preventDefault();
-    window.location.href = createMailtoUrl(email.href, subjectInput.value, messageInput.value);
+    
+    const submitBtn = document.getElementById("submit-btn");
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = "Sending...";
+    submitBtn.disabled = true;
+    
+    // Your exact configured IDs
+    const serviceID = "service_i4017i8"; 
+    const templateID = "template_8oy1gs6"; 
+    
+    // Send the form payload
+    emailjs.sendForm(serviceID, templateID, this)
+      .then(() => {
+        showSnackbar("Email Sent successfully!");
+        form.reset();
+      })
+      .catch((error) => {
+        console.error("EmailJS Error:", error);
+        showSnackbar("Failed to send email. Please try again.");
+      })
+      .finally(() => {
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+      });
   });
+
+  function showSnackbar(msg) {
+    const bar = document.getElementById("snackbar");
+    bar.innerText = msg;
+    bar.classList.add("show");
+
+    setTimeout(() => {
+      bar.classList.remove("show");
+    }, 2000);
+  }
 
   footerEmail.href = email.href;
   footerEmail.textContent = email.text;
+
+  // Render location & availability in footer
+  if (profile.location || profile.availability) {
+    const footerInner = app.querySelector(".footer__inner");
+    const locationEl = document.createElement("span");
+    locationEl.className = "footer__location";
+    const parts = [];
+    if (profile.location) parts.push(profile.location);
+    if (profile.availability) parts.push(profile.availability);
+    locationEl.textContent = parts.join(" · ");
+    locationEl.style.cssText = "font-size:0.75rem;color:var(--text-muted,#666);margin-top:0.25rem;display:block";
+    footerInner.appendChild(locationEl);
+  }
 
   socialLinks.forEach((linkData, index) => {
     footerLinks.appendChild(createFooterTextLink(linkData.label, linkData.href));
@@ -853,6 +978,23 @@ function setupTitleChargeEffect(titleElement) {
   titleElement.addEventListener("pointercancel", releaseCharge);
   titleElement.addEventListener("touchstart", startCharge, { passive: true });
   titleElement.addEventListener("touchend", releaseCharge, { passive: true });
+  titleElement.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      const rect = titleElement.getBoundingClientRect();
+      const syntheticEvent = {
+        button: 0,
+        clientX: rect.left + rect.width / 2,
+        clientY: rect.top + rect.height / 2
+      };
+      startCharge(syntheticEvent);
+    }
+  });
+  titleElement.addEventListener("keyup", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      releaseCharge();
+    }
+  });
 }
 
 renderPortfolio(portfolioData);

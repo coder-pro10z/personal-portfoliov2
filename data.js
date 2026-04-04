@@ -1,82 +1,78 @@
 const portfolioData = {
   profile: {
     name: "Praveen Kashyap",
-    title: "Full Stack .NET Developer @ Coforge",
-    tagline: "Building scalable backend systems with ASP.NET Core",
+    title: "Software Engineer at Coforge",
+    tagline: "ASP.NET Core APIs, Angular SPAs, and full-stack .NET architecture - clean code, DI patterns, and systems built to last.",
     email: "[2pkashyap2001@gmail.com](mailto:2pkashyap2001@gmail.com)",
+    location: "Noida, India",
+    availability: "Open to opportunities",
     links: {
       github: "https://github.com/coder-pro10z",
       linkedin: "https://www.linkedin.com/in/coder-pro10z/",
       resume: "./Praveen_Kashyap_Dotnet_resume.pdf"
     },
-    brandMark: "Praveen Kashyap",
+    brandMark: "PK",
     brandName: "Portfolio"
   },
 
   skills: {
-    backend: [".NET Core", "ASP.NET Core", "REST APIs"],
-    frontend: ["Angular", "React", "TypeScript"],
+    backend: ["ASP.NET Core", ".NET Core", "C#", "Entity Framework Core"],
+    frontend: ["Angular", "TypeScript", "RxJS", "React"],
     database: ["SQL Server", "PostgreSQL", "MongoDB"],
-    tools: ["Git", "GitHub", "Visual Studio", "VS Code", "Postman", "Swagger"],
-    methodologies: ["Agile", "Scrum"]
+    tools: ["Git", "Docker", "Postman", "Swagger"],
+    methodologies: ["Clean Architecture", "Repository Pattern", "DI / IoC", "SOLID", "Agile"]
   },
 
-  // projects: [
-  //   {
-  //     title: "User Management System",
-  //     description: "Role-based authentication system",
-  //     highlights: [
-  //       "Implemented custom authorization",
-  //       "Optimized database queries",
-  //       "Applied Dependency Injection architecture"
-  //     ],
-  //     tech: ["ASP.NET Core", "SQL Server"],
-  //     service: "Authentication & Authorization",
-  //     icon: "U",
-  //     link: "https://github.com/YOUR_USERNAME/user-management-system",
-  //     linkLabel: "Case Study "
-  //   },
-  //   {
-  //     title: "Interview Prep Platform",
-  //     description: "Structured practice workflow for technical interview preparation",
-  //     highlights: [
-  //       "Built modular APIs for question delivery",
-  //       "Designed maintainable service-layer abstractions",
-  //       "Improved admin workflows for content management"
-  //     ],
-  //     tech: ["ASP.NET Core", "Angular"],
-  //     service: "Full Stack Application",
-  //     icon: "I",
-  //     link: "https://github.com/YOUR_USERNAME/interview-prep-platform",
-  //     linkLabel: "Case Study "
-  //   },
-  //   {
-  //     title: "Observability Dashboard",
-  //     description: "Centralized monitoring experience for application health and diagnostics",
-  //     highlights: [
-  //       "Introduced structured logging patterns with Serilog",
-  //       "Reduced debugging time with richer telemetry",
-  //       "Improved deployment confidence through visibility"
-  //     ],
-  //     tech: [".NET Core", "PostgreSQL"],
-  //     service: "Monitoring & Diagnostics",
-  //     icon: "O",
-  //     link: "https://github.com/YOUR_USERNAME/observability-dashboard",
-  //     linkLabel: "Case Study "
-  //   }
-  // ],
+  experience: [
+    {
+      company: "Coforge",
+      role: "Software Engineer",
+      duration: "Jan 2024 - Present",
+      highlights: [
+        "Lead development on ASP.NET Core APIs with role-based authorization - reduced auth-related bugs by enforcing policy-based access control",
+        "Optimized SQL Server queries and EF Core configurations - improved endpoint response times on high-load routes",
+        "Enforced SOLID principles and DI patterns across the codebase - reduced inter-module coupling and improved testability",
+        "Identified and resolved XSS and open redirect vulnerabilities - hardened API surface across 3 enterprise modules",
+        "Contributed to design reviews, code reviews, and sprint deliveries in a 6-person Agile team"
+      ],
+      tech: ["ASP.NET Core", "C#", "SQL Server", "Angular", "Entity Framework Core"]
+    },
+    {
+      company: "Coforge",
+      role: "Graduate Engineer Trainee (GET)",
+      duration: "Jul 2022 - Dec 2023",
+      highlights: [
+        "Completed structured training in ASP.NET Core, Angular, SQL Server, and software engineering fundamentals",
+        "Built internal training projects applying repository pattern, API design, and Angular module structure",
+        "Contributed to production bug fixes and feature additions under senior engineer mentorship",
+        "Gained hands-on exposure to CI/CD pipelines, Git branching workflows, and enterprise code standards"
+      ],
+      tech: ["ASP.NET Core", "C#", "Angular", "SQL Server"]
+    },
+    {
+      company: "Self-Initiated",
+      role: "Web Developer Intern (Project-Based)",
+      duration: "Jan 2022 - Jun 2022",
+      highlights: [
+        "Built RentIt - a full-stack property rental marketplace using React, Node.js, and MongoDB",
+        "Designed document-based MongoDB schema and implemented secure JWT authentication",
+        "Developed reusable React components - search, filter, and booking flows"
+      ],
+      tech: ["React", "Node.js", "MongoDB", "JavaScript"]
+    }
+  ],
 
   projects: [
     {
       title: "Money Pilot",
-      description: "A comprehensive full-stack personal finance platform designed to track, manage, and analyze financial data.",
+      description: "Personal finance tracker with a clean service-layer backend and component-driven Angular frontend - focused on data accuracy, secure flows, and responsive UX.",
       highlights: [
-        "Built scalable RESTful APIs using ASP.NET Core",
-        "Developed a responsive, component-driven Angular frontend",
-        "Implemented secure data handling and user flows"
+        "Designed RESTful API endpoints using ASP.NET Core with Dependency Injection and repository pattern architecture",
+        "Built a fully responsive Angular SPA with modular components and clean service abstractions",
+        "Implemented role-based access control and secure user authentication with JWT"
       ],
-      tech: ["ASP.NET Core", "Angular", "C#"],
-      service: "Financial Tech",
+      tech: ["ASP.NET Core", "Angular", "C#", "SQL Server"],
+      service: "Full Stack · ASP.NET Core + Angular",
       icon: {
         type: "material-symbols-outlined",
         name: "payments"
@@ -88,49 +84,49 @@ const portfolioData = {
     },
     {
       title: "RentIt",
-      description: "An end-to-end property marketplace platform allowing users to list, browse, and seamlessly book rentals.",
+      description: "Property rental marketplace with a flexible NoSQL data layer, interactive React UI, and secure booking workflows - designed to support multi-landlord listings at scale.",
       highlights: [
-        "Architected a scalable NoSQL schema with MongoDB",
-        "Built interactive UI components using React",
-        "Engineered secure user authentication and booking workflows"
+        "Designed a document-based MongoDB schema to support flexible listing attributes and efficient query patterns",
+        "Developed reusable React components with search, filter, and booking flows",
+        "Implemented JWT-based authentication and protected API routes for landlord and tenant role separation"
       ],
       tech: ["React", "Node.js", "MongoDB"],
-      service: "Full Stack Marketplace",
+      service: "Full Stack · React + Node.js + MongoDB",
       icon: {
         type: "material-symbols-outlined",
         name: "home"
       },
       link: "https://github.com/coder-pro10z/RentIt",
-      linkLabel: "View Repository ",
+      linkLabel: "View Repository",
       demoLink: "",
-      demoLabel: "View Demo"
+      demoLabel: ""
     },
     {
       title: "Interview Prep Platform",
-      description: "A specialized interview preparation platform tailored for the .NET and Angular ecosystem. (Currently in active development).",
+      description: "Structured interview preparation platform for .NET and Angular developers - featuring Mock Quizzes, timed assessments, and a curated knowledge base across System Design, OOP, and Security.",
       highlights: [
-        "Engineered diverse evaluation workflows including instant-feedback Mock Quizzes and strict 'Interview Ready' professional assessments",
-        "Curated a comprehensive knowledge base with CheatSheets and targeted questions spanning System Design, OOP, Backend, Frontend, Database, and Security",
-        "Architected modular APIs to support scalable content delivery and maintainable system design"
+        "Engineered two evaluation modes: instant-feedback Mock Quizzes and timed 'Interview Ready' professional assessments",
+        "Curated a knowledge base spanning System Design, OOP, Backend, Frontend, Database, and Security topics",
+        "Built modular ASP.NET Core APIs with clean service-layer abstractions for scalable content delivery"
       ],
-      tech: [".NET Core", "Angular"],
-      service: "Educational Platform",
+      tech: [".NET Core", "Angular", "C#"],
+      service: "Full Stack · .NET Core + Angular",
       icon: {
         type: "material-symbols-outlined",
         name: "menu_book"
       },
       link: "https://github.com/coder-pro10z/FullStackMastery",
-      linkLabel: "View Repository ",
+      linkLabel: "View Repository",
       demoLink: "",
-      demoLabel: "View Demo"
+      demoLabel: ""
     }
   ],
-  
+
   achievements: [
-    "3 years of professional experience with .NET and Angular",
-    "Builds clean, maintainable full-stack applications",
-    "Creates mobile-friendly responsive interfaces",
-    "Explores MERN to stay versatile across stacks"
+    "3 years delivering production full-stack web applications across .NET Core, Angular, and React",
+    "Consistent focus on clean architecture: separation of concerns, DI patterns, and maintainable service layers",
+    "Experienced building RESTful APIs and Angular SPAs end-to-end - from schema design to deployment",
+    "Actively building an Interview Prep Platform for the .NET community - in use for self-assessment"
   ],
 
   socialLinks: [
@@ -140,34 +136,38 @@ const portfolioData = {
   ],
 
   navigation: [
+    { label: "Professional Experience", href: "#experience" },
     { label: "Projects", href: "#portfolio" },
     { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" }
   ],
 
   hero: {
-    eyebrow: "Portfolio",
+    eyebrow: "Full Stack .NET Developer · 3 Years",
     actions: [
       { label: "Projects", href: "#portfolio", variant: "primary" },
-      { label: "About", href: "#about", variant: "ghost" },
       { label: "Resume", href: "./Praveen_Kashyap_Dotnet_resume.pdf", variant: "success" }
     ]
   },
 
   sections: {
+    experience: {
+      title: "Professional Experience",
+      meta: "Professional work history"
+    },
     projects: {
       title: "Selected Projects",
       meta: "Scalable systems, clean architecture, measurable impact"
     },
     about: {
       title: "Skills & About",
-      meta: "Minimal, structured",
-      copy: "Full Stack Developer with 3 years of experience building web applications with .NET Core and Angular, focused on clean architecture and scalable solutions."
+      meta: "Focused on clean architecture and shipping quality software",
+      copy: "I build full-stack web applications using ASP.NET Core on the backend and Angular on the frontend. My focus is on clean architecture, separation of concerns, and systems that are easy to extend and maintain. Outside of my work at Coforge, I'm building an interview prep platform for the .NET community."
     },
     contact: {
       title: "Contact",
-      meta: "Write a mail or connect on LinkedIn",
-      copy: "If you would like to collaborate, write a mail or directly DM me on LinkedIn.",
+      meta: "Open to collaborations and new opportunities",
+      copy: "If you'd like to discuss a project or opportunity, reach out by mail or connect on LinkedIn.",
       actions: [
         {
           type: "gmail",
@@ -176,7 +176,7 @@ const portfolioData = {
         },
         {
           type: "linkedin",
-          label: "Directly DM me on LinkedIn",
+          label: "Connect on LinkedIn",
           href: "https://www.linkedin.com/in/coder-pro10z/"
         }
       ],
